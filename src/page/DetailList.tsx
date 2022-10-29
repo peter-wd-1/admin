@@ -79,13 +79,17 @@ export function DetailList({ onLogout }: { onLogout: () => void }) {
               <BreadcrumbLink href="/">Admin</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/">Class Order List</BreadcrumbLink>
+              <BreadcrumbLink href="/" noOfLines={1}>
+                Class Order List
+              </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbItem isCurrentPage>
               <BreadcrumbLink href="/user">Details</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbItem isCurrentPage>
-              <BreadcrumbLink href="/user">{phoneNumber}</BreadcrumbLink>
+              <BreadcrumbLink href="/user" noOfLines={1}>
+                {phoneNumber}
+              </BreadcrumbLink>
             </BreadcrumbItem>
           </Breadcrumb>
         </Container>

@@ -59,7 +59,7 @@ export function UserDetailTable() {
       borderColor={colorMode === "light" ? "gray.600" : "gray.300"}
       color={colorMode === "light" ? "gray.200" : "gray.600"}
       maxH="80vh"
-      overflow="hidden"
+      overflow="scroll"
       overflowY="scroll"
       overflowX="scroll"
     >
