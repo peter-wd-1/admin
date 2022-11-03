@@ -54,6 +54,7 @@ export function CustomerList({ onLogout }: { onLogout: () => void }) {
   const [searchQuery, setSearchQuery] = React.useState("nope");
   const [searchMethod, setSearchMethod] = React.useState("phone");
   const searchUserQuery = useSearchUser(searchQuery);
+  const searchUserNameQuery = useSearchUserName(searchQuery);
 
   React.useEffect(() => {
     if (searchQuery === "") setSearchQuery("nope");
@@ -150,7 +151,7 @@ export function CustomerList({ onLogout }: { onLogout: () => void }) {
             query={userlistQuery}
             searchMethod={searchMethod}
             searchQuery={
-              searchMethod === "phone" ? searchUserQuery : searchUserQuery
+              searchMethod === "phone" ? searchUserQuery : searchUserNameQuery
             }
           />
         </Container>
