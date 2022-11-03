@@ -11,12 +11,26 @@ async function fetchSearch(query: string) {
   return data;
 }
 
+async function fetchSearchName(query: string) {
+  const { data } = await axios.get<Data>(
+    `https://trvwdb8xrh.execute-api.us-east-1.amazonaws.com/beta/classtable?mode=searchName&search=${query}`
+  );
+  return data;
+}
 export const useSearchUser = (searchQuery: string) => {
   const { isLoading, isError, data } = useQuery(
     ["searchquery", searchQuery],
     async () => await fetchSearch(searchQuery)
   );
-  return { isLoading, isError, searchResult: data };
+  return { isLoading, isError, data };
+};
+
+export const useSearchUserName = (searchQuery: string) => {
+  const { isLoading, isError, data } = useQuery(
+    ["searchqueryname", searchQuery],
+    async () => await fetchSearchName(searchQuery)
+  );
+  return { isLoading, isError, data };
 };
 
 export const useAdjustCount = () => {

@@ -74,10 +74,6 @@ export function AdjustPopover({ value, id }: { value: number; id: string }) {
     }
   }, [countAdjust.isSuccess, countAdjust.isError]);
 
-  useEffect(() => {
-    queryClient.invalidateQueries();
-  }, [countAdjust.isSuccess]);
-
   return (
     <Popover placement="bottom">
       <PopoverTrigger>
@@ -133,6 +129,8 @@ export function AdjustPopover({ value, id }: { value: number; id: string }) {
                       color="green.800"
                       onClick={() => {
                         countAdjust.mutate({ id, count });
+                        queryClient.invalidateQueries();
+                        queryClient.invalidateQueries();
                       }}
                     >
                       Save

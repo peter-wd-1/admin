@@ -37,7 +37,7 @@ import { FaQrcode } from "react-icons/fa";
 export function UserDetailTable() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { phoneNumber } = useParams();
-  const { isLoading, searchResult } = useSearchUser(phoneNumber || "");
+  const { isLoading, data } = useSearchUser(phoneNumber || "");
   const colorMode = useColorModeValue("dark", "light");
 
   return (
@@ -78,7 +78,7 @@ export function UserDetailTable() {
                   ))}
                 </Tr>
               ))
-            : searchResult!.Items.sort((a, b) =>
+            : data!.Items.sort((a, b) =>
                 parseInt(a.id.split("-").join("")) >
                 parseInt(b.id.split("-").join(""))
                   ? -1

@@ -35,9 +35,15 @@ import { Data } from "./type";
 export function UserTable({
   query,
   searchQuery,
+  searchMethod,
 }: {
   query: UseInfiniteQueryResult<Data, any>;
-  searchQuery?: UseQueryResult<Data, any>;
+  searchMethod?: string;
+  searchQuery?: {
+    isLoading: boolean;
+    isError: boolean;
+    data: Data | undefined;
+  };
 }) {
   const [pageKey, setPageKey] = useState("none");
   const initialFocusRef = React.useRef<any>(null);

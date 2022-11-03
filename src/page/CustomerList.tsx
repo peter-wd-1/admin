@@ -9,6 +9,7 @@ import {
   VStack,
   Container,
   InputGroup,
+  InputLeftElement,
   InputLeftAddon,
   Text,
   BreadcrumbItem,
@@ -20,6 +21,11 @@ import {
   useDisclosure,
   Badge,
   useColorModeValue,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Button,
 } from "@chakra-ui/react";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
 import { FaSearch, FaBars } from "react-icons/fa";
@@ -28,6 +34,7 @@ import { UserTable } from "../UserTable";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Data } from "../type";
 import axios from "axios";
+import { useSearchUser, useSearchUserName } from "../feature/query";
 
 async function fetchUsers({ pageParam = "0" }) {
   const { data } = await axios.get<Data>(
@@ -35,12 +42,7 @@ async function fetchUsers({ pageParam = "0" }) {
   );
   return data;
 }
-async function fetchSearch(query: string) {
-  const { data } = await axios.get<Data>(
-    `https://trvwdb8xrh.execute-api.us-east-1.amazonaws.com/beta/classtable?mode=search&search=${query}`
-  );
-  return data;
-}
+
 export function CustomerList({ onLogout }: { onLogout: () => void }) {
   const btnRef = React.useRef<HTMLButtonElement>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -50,10 +52,8 @@ export function CustomerList({ onLogout }: { onLogout: () => void }) {
     keepPreviousData: true,
   });
   const [searchQuery, setSearchQuery] = React.useState("nope");
-  const searchUserQuery = useQuery(
-    ["searchquery", searchQuery],
-    async () => await fetchSearch(searchQuery)
-  );
+  const [searchMethod, setSearchMethod] = React.useState("phone");
+  const searchUserQuery = useSearchUser(searchQuery);
 
   React.useEffect(() => {
     if (searchQuery === "") setSearchQuery("nope");
@@ -100,10 +100,44 @@ export function CustomerList({ onLogout }: { onLogout: () => void }) {
               borderColor={colorMode === "light" ? "gray.600" : "gray.300"}
               boxShadow="sm"
             >
-              <InputLeftAddon children={<FaSearch color="gray.300" />} />
+              <InputLeftAddon
+                zIndex="10000"
+                children={
+                  <Menu>
+                    <MenuButton>
+                      <IconButton
+                        bg="transparent"
+                        size="md"
+                        aria-label="Menu"
+                        icon={<FaSearch color="gray.300" />}
+                      />
+                    </MenuButton>
+                    <MenuList>
+                      <MenuItem
+                        onClick={() => {
+                          setSearchMethod("name");
+                        }}
+                      >
+                        Name
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          setSearchMethod("phone");
+                        }}
+                      >
+                        Phone
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
+                }
+              />
               <Input
-                placeholder="Search User by phone #"
-                type="number"
+                placeholder={
+                  searchMethod === "phone"
+                    ? "Search User by phone #"
+                    : "Search User by name"
+                }
+                type={searchMethod === "phone" ? "number" : "text"}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
                 }}
@@ -112,7 +146,13 @@ export function CustomerList({ onLogout }: { onLogout: () => void }) {
           </Flex>
         </Container>
         <Container maxW="container.lg">
-          <UserTable query={userlistQuery} searchQuery={searchUserQuery} />
+          <UserTable
+            query={userlistQuery}
+            searchMethod={searchMethod}
+            searchQuery={
+              searchMethod === "phone" ? searchUserQuery : searchUserQuery
+            }
+          />
         </Container>
       </VStack>
     </Box>
