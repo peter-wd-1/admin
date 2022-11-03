@@ -16,22 +16,8 @@ import {
   PopoverTrigger,
   Popover,
   Portal,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
   Button,
-  useNumberInput,
-  PopoverFooter,
-  PopoverArrow,
-  Box,
-  ButtonGroup,
   useColorModeValue,
-  Spinner,
-  Tfoot,
-  Center,
-  Flex,
-  Container,
-  Stack,
   Skeleton,
 } from "@chakra-ui/react";
 import { BsGearFill } from "react-icons/bs";
@@ -129,83 +115,91 @@ export function UserTable({
           ) : (
             <>
               {data?.pages.map((page) =>
-                page?.Items.map(
-                  (item) =>
-                    item.classcount !== "0" && (
-                      <Tr
-                        _hover={{
-                          bg: colorMode === "light" ? "gray.900" : "gray.50",
-                          cursor: "pointer",
+                page?.Items.sort((a, b) =>
+                  parseInt(a.id.split("-").join("")) >
+                  parseInt(b.id.split("-").join(""))
+                    ? -1
+                    : 1
+                ).map((item) => (
+                  <Tr
+                    _hover={{
+                      bg: colorMode === "light" ? "gray.900" : "gray.50",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <Td>
+                      <Text
+                        textOverflow="ellipsis"
+                        overflow="hidden"
+                        maxWidth="150px"
+                        onClick={() => {
+                          navigate(`/user/${item.phonenumber}`);
                         }}
                       >
-                        <Td>
-                          <Text
-                            textOverflow="ellipsis"
-                            overflow="hidden"
-                            maxWidth="150px"
-                            onClick={() => {
-                              navigate(`/user/${item.phonenumber}`);
-                            }}
-                          >
-                            {item.phonenumber.split("-").join("")}
-                          </Text>
-                        </Td>
-                        <Td>
-                          <Tooltip label={item.studentName}>
-                            <Text
-                              textOverflow="ellipsis"
-                              overflow="hidden"
-                              maxWidth="150px"
-                              onClick={() => {
-                                navigate(`/user/${item.phonenumber}`);
-                              }}
-                            >
-                              {item.studentName}
-                            </Text>
-                          </Tooltip>
-                        </Td>
-                        <Td>
-                          <Tooltip label={item.className}>
-                            <Text
-                              textOverflow="ellipsis"
-                              overflow="hidden"
-                              maxWidth="150px"
-                              onClick={() => {
-                                navigate(`/user/${item.phonenumber}`);
-                              }}
-                            >
-                              {item.className}
-                            </Text>
-                          </Tooltip>
-                        </Td>
-                        <Td>
-                          <HStack>
-                            <Text color="blue.600" as="b" px="2">
-                              {item.classcount}
-                            </Text>
-                            <AdjustPopover
-                              value={parseInt(item.classcount)}
-                              id={item.id}
-                            />
-                          </HStack>
-                        </Td>
-                        <Td>
-                          <Tooltip label={item.id}>
-                            <Text
-                              textOverflow="ellipsis"
-                              overflow="hidden"
-                              maxWidth="150px"
-                              onClick={() => {
-                                navigate(`/user/${item.phonenumber}`);
-                              }}
-                            >
-                              {item.id}
-                            </Text>
-                          </Tooltip>
-                        </Td>
-                      </Tr>
-                    )
-                )
+                        {item.phonenumber.split("-").join("")}
+                      </Text>
+                    </Td>
+                    <Td>
+                      <Tooltip label={item.studentName}>
+                        <Text
+                          textOverflow="ellipsis"
+                          overflow="hidden"
+                          maxWidth="150px"
+                          onClick={() => {
+                            navigate(`/user/${item.phonenumber}`);
+                          }}
+                        >
+                          {item.studentName}
+                        </Text>
+                      </Tooltip>
+                    </Td>
+                    <Td>
+                      <Tooltip label={item.className}>
+                        <Text
+                          textOverflow="ellipsis"
+                          overflow="hidden"
+                          maxWidth="150px"
+                          onClick={() => {
+                            navigate(`/user/${item.phonenumber}`);
+                          }}
+                        >
+                          {item.className}
+                        </Text>
+                      </Tooltip>
+                    </Td>
+                    <Td>
+                      <HStack>
+                        <Text
+                          color={
+                            item.classcount === "0" ? "red.600" : "blue.600"
+                          }
+                          as="b"
+                          px="2"
+                        >
+                          {item.classcount}
+                        </Text>
+                        <AdjustPopover
+                          value={parseInt(item.classcount)}
+                          id={item.id}
+                        />
+                      </HStack>
+                    </Td>
+                    <Td>
+                      <Tooltip label={item.id}>
+                        <Text
+                          textOverflow="ellipsis"
+                          overflow="hidden"
+                          maxWidth="150px"
+                          onClick={() => {
+                            navigate(`/user/${item.phonenumber}`);
+                          }}
+                        >
+                          {item.id}
+                        </Text>
+                      </Tooltip>
+                    </Td>
+                  </Tr>
+                ))
               )}
               {isFetching &&
                 Array.from({ length: 3 }).map(() => (

@@ -6,47 +6,36 @@ import {
   Tr,
   Th,
   Table,
-  Flex,
   Tbody,
   Td,
-  Input,
-  VStack,
-  Container,
-  InputGroup,
-  InputLeftAddon,
   Text,
-  BreadcrumbItem,
-  Breadcrumb,
-  BreadcrumbLink,
   HStack,
   IconButton,
-  IconButtonProps,
-  useDisclosure,
   Tooltip,
-  PopoverTrigger,
-  Popover,
-  Portal,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  Button,
-  useNumberInput,
-  PopoverFooter,
-  PopoverArrow,
-  Box,
-  ButtonGroup,
   Skeleton,
   useColorModeValue,
   List,
   ListItem,
   ListIcon,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+  Center,
 } from "@chakra-ui/react";
 import { BsGearFill } from "react-icons/bs";
 import { useParams } from "react-router-dom";
 import { useSearchUser } from "./feature/query";
 import { MdCheckCircle } from "react-icons/md";
+import { AdjustPopover } from "./AdjustPopover";
+import QRCode from "react-qr-code";
+import { FaQrcode } from "react-icons/fa";
 
 export function UserDetailTable() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { phoneNumber } = useParams();
   const { isLoading, searchResult } = useSearchUser(phoneNumber || "");
   const colorMode = useColorModeValue("dark", "light");
@@ -72,9 +61,10 @@ export function UserDetailTable() {
           bg={colorMode === "dark" ? "gray.50" : "gray.900"}
         >
           <Tr>
-            <Th>ID</Th>
+            <Th>QR-CODE</Th>
             <Th>Class</Th>
             <Th>Redeem Date</Th>
+            <Th>Qty</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -88,21 +78,45 @@ export function UserDetailTable() {
                   ))}
                 </Tr>
               ))
-            : searchResult!.Items.map((item) => (
+            : searchResult!.Items.sort((a, b) =>
+                parseInt(a.id.split("-").join("")) >
+                parseInt(b.id.split("-").join(""))
+                  ? -1
+                  : 1
+              ).map((item) => (
                 <Tr
                   _hover={{
                     bg: colorMode === "light" ? "gray.900" : "gray.50",
-                    cursor: "pointer",
                   }}
                 >
                   <Td verticalAlign="top">
-                    <Text
-                      textOverflow="ellipsis"
-                      overflow="hidden"
-                      maxWidth="150px"
-                    >
-                      {item.id}
-                    </Text>
+                    <HStack>
+                      <Text
+                        textOverflow="ellipsis"
+                        overflow="hidden"
+                        maxWidth="150px"
+                      >
+                        {item.id}
+                      </Text>
+                      <IconButton
+                        size="sm"
+                        icon={<FaQrcode color="gray.300" />}
+                        aria-label="setting"
+                        onClick={onOpen}
+                      />
+                    </HStack>
+                    <Modal isOpen={isOpen} onClose={onClose}>
+                      <ModalOverlay />
+                      <ModalContent>
+                        <ModalHeader>QR Code</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                          <Center p="20px">
+                            <QRCode value={item.id} />
+                          </Center>
+                        </ModalBody>
+                      </ModalContent>
+                    </Modal>
                   </Td>
                   <Td verticalAlign="top">
                     <Text>{item.className}</Text>
@@ -122,6 +136,21 @@ export function UserDetailTable() {
                         </Tooltip>
                       )}
                     </List>
+                  </Td>
+                  <Td>
+                    <HStack>
+                      <Text
+                        color={item.classcount === "0" ? "red.600" : "blue.600"}
+                        as="b"
+                        px="2"
+                      >
+                        {item.classcount}
+                      </Text>
+                      <AdjustPopover
+                        value={parseInt(item.classcount)}
+                        id={item.id}
+                      />
+                    </HStack>
                   </Td>
                 </Tr>
               ))}
