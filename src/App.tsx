@@ -14,7 +14,6 @@ export function App() {
           <AppRoutes />
         </ChakraProvider>
       </BrowserRouter>
-      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }
