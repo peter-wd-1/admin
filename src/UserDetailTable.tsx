@@ -29,7 +29,7 @@ import {
 import { BsGearFill } from "react-icons/bs";
 import { useParams } from "react-router-dom";
 import { useSearchUser } from "./feature/query";
-import { MdCheckCircle } from "react-icons/md";
+import { MdCheckCircle, MdInfo } from "react-icons/md";
 import { AdjustPopover } from "./AdjustPopover";
 import QRCode from "react-qr-code";
 import { FaQrcode } from "react-icons/fa";
@@ -140,7 +140,18 @@ export function UserDetailTable({
                       {item.redeemdate ? (
                         item.redeemdate.map((date) => (
                           <ListItem my="2px">
-                            <ListIcon as={MdCheckCircle} color="green.400" />
+                            <ListIcon
+                              as={
+                                date.includes("Changed")
+                                  ? MdInfo
+                                  : MdCheckCircle
+                              }
+                              color={
+                                date.includes("Changed")
+                                  ? "orange.300"
+                                  : "green.400"
+                              }
+                            />
                             {date}
                           </ListItem>
                         ))
