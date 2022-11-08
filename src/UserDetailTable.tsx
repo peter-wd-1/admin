@@ -33,6 +33,7 @@ import { MdCheckCircle } from "react-icons/md";
 import { AdjustPopover } from "./AdjustPopover";
 import QRCode from "react-qr-code";
 import { FaQrcode } from "react-icons/fa";
+import { QRCodeCanvas } from "qrcode.react";
 
 export function UserDetailTable({
   isAdjustLoading,
@@ -121,7 +122,11 @@ export function UserDetailTable({
                         <ModalCloseButton />
                         <ModalBody>
                           <Center p="20px">
-                            <QRCode value={`${QRCodeValue}`} />
+                            <QRCodeCanvas
+                              id="qrcode"
+                              size={300}
+                              value={`http://${QRCodeValue}`}
+                            />
                           </Center>
                         </ModalBody>
                       </ModalContent>
