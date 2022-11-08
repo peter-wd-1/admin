@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   TableContainer,
   TableCaption,
@@ -34,11 +34,16 @@ import { AdjustPopover } from "./AdjustPopover";
 import QRCode from "react-qr-code";
 import { FaQrcode } from "react-icons/fa";
 
-export function UserDetailTable() {
+export function UserDetailTable({
+  isAdjustLoading,
+}: {
+  isAdjustLoading?: boolean;
+}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { phoneNumber } = useParams();
   const { isLoading, data } = useSearchUser(phoneNumber || "");
   const colorMode = useColorModeValue("dark", "light");
+  const [QRCodeValue, setQrCodeValue] = useState("");
 
   return (
     <TableContainer
@@ -102,7 +107,11 @@ export function UserDetailTable() {
                         size="sm"
                         icon={<FaQrcode color="gray.300" />}
                         aria-label="setting"
-                        onClick={onOpen}
+                        onClick={(e) => {
+                          console.log("clicked qr:", item.id);
+                          setQrCodeValue(item.id);
+                          onOpen();
+                        }}
                       />
                     </HStack>
                     <Modal isOpen={isOpen} onClose={onClose}>
@@ -112,7 +121,7 @@ export function UserDetailTable() {
                         <ModalCloseButton />
                         <ModalBody>
                           <Center p="20px">
-                            <QRCode value={item.id} />
+                            <QRCode value={`${QRCodeValue}`} />
                           </Center>
                         </ModalBody>
                       </ModalContent>

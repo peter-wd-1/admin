@@ -28,14 +28,14 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
-import { FaSearch, FaBars, FaArrowDown } from "react-icons/fa";
+import { FaSearch, FaBars } from "react-icons/fa";
 import { MDrawer } from "../Drawer";
 import { UserTable } from "../UserTable";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Data } from "../type";
 import axios from "axios";
 import { useSearchUser, useSearchUserName } from "../feature/query";
-import { BsCaretDown, BsCaretDownFill } from "react-icons/bs";
+import { BsCaretDownFill } from "react-icons/bs";
 
 async function fetchUsers({ pageParam = "0" }) {
   const { data } = await axios.get<Data>(
