@@ -26,7 +26,7 @@ import {
   ModalCloseButton,
   Center,
 } from "@chakra-ui/react";
-import { BsGearFill } from "react-icons/bs";
+import { BsGearFill, BsArrowReturnRight } from "react-icons/bs";
 import { useParams } from "react-router-dom";
 import { useSearchUser } from "./feature/query";
 import { MdCheckCircle, MdInfo } from "react-icons/md";
@@ -140,19 +140,30 @@ export function UserDetailTable({
                       {item.redeemdate ? (
                         item.redeemdate.map((date) => (
                           <ListItem my="2px">
-                            <ListIcon
-                              as={
-                                date.includes("Changed")
-                                  ? MdInfo
-                                  : MdCheckCircle
-                              }
-                              color={
-                                date.includes("Changed")
-                                  ? "orange.300"
-                                  : "green.400"
-                              }
-                            />
-                            {date}
+                            {date.includes("Changed") ? (
+                              <>
+                                <ListIcon as={MdInfo} color={"orange.300"} />C
+                                {date.split(": C")[1]}
+                                <br />
+                                <HStack px={2} py={1}>
+                                  <BsArrowReturnRight />
+                                  <Text>{date.split(": C")[0]}</Text>
+                                </HStack>
+                              </>
+                            ) : (
+                              <>
+                                <ListIcon
+                                  as={MdCheckCircle}
+                                  color={"green.400"}
+                                />
+                                Redeemed
+                                <br />
+                                <HStack px={2} py={1}>
+                                  <BsArrowReturnRight />
+                                  <Text>{date}</Text>
+                                </HStack>
+                              </>
+                            )}
                           </ListItem>
                         ))
                       ) : (
