@@ -69,7 +69,7 @@ export function UserDetailTable({
           <Tr>
             <Th>QR-CODE</Th>
             <Th>Class</Th>
-            <Th>Redeem Date</Th>
+            <Th>Log</Th>
             <Th>Qty</Th>
           </Tr>
         </Thead>
